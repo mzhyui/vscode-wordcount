@@ -1,0 +1,88 @@
+{
+	"name": "word-count-HotCRP",
+	"displayName": "Word Count HotCRP",
+	"description": "Live word count that matches HotCRP's word limits, for the document or the current selection(s), with a character counter you can turn on and off. Fork of ms-vscode.wordcount.",
+	"version": "0.4.0",
+	"publisher": "mzhyui",
+	"license": "MIT",
+	"icon": "images/icon.png",
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"hotcrp",
+		"word count",
+		"character count",
+		"selection",
+		"markdown",
+		"status bar",
+		"abstract",
+		"submission"
+	],
+	"engines": {
+		"vscode": "^1.86.0"
+	},
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/src/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "wordcount.toggleCharacterCount",
+				"title": "Toggle Character Count",
+				"category": "Word Count HotCRP"
+			}
+		],
+		"configuration": {
+			"title": "Word Count HotCRP",
+			"properties": {
+				"wordcount.showCharacterCount": {
+					"type": "boolean",
+					"default": false,
+					"description": "Show the character count next to the word count in the status bar. Toggle it with the \"Word Count: Toggle Character Count\" command or by clicking the status bar item."
+				},
+				"wordcount.languages": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					},
+					"default": [
+						"markdown"
+					],
+					"markdownDescription": "Language IDs the word count is shown for. Use `*` to show it for every file."
+				},
+				"wordcount.countMode": {
+					"type": "string",
+					"enum": [
+						"hotcrp",
+						"markdown",
+						"online",
+						"whitespace"
+					],
+					"enumDescriptions": [
+						"Count words the way HotCRP does for submission word limits: a run of non-space text whose first character is not one of - . , ; : < > ! ? * _ ~ ` # |. Markdown markers are skipped; ©, emoji, parentheses and URLs count; a run of CJK text with no spaces is one word.",
+						"Words hold a letter or digit, so Markdown markers such as #, - and > are skipped. Each Chinese or Japanese character is one word.",
+						"Match online word counters that are given the raw text: as markdown, but symbols such as ©, ™ and emoji are words, and a URL is a word of its own, so a link [label](https://…) is two words.",
+						"Every run of non-space characters is a word, # and - included, as in the original ms-vscode.wordcount and wc -w."
+					],
+					"default": "hotcrp",
+					"markdownDescription": "How words are counted. The default `hotcrp` matches the word limits HotCRP applies to abstracts, reviews and comments. Use `markdown` for Markdown-aware counting, `online` to get the same number as a web-based word counter that you paste the raw text into, or `whitespace` for the original extension's numbers."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"test": "npm run compile && node --test \"out/test/**/*.test.js\"",
+		"package": "vsce package --no-dependencies"
+	},
+	"devDependencies": {
+		"@types/node": "^20.0.0",
+		"@types/vscode": "~1.86.0",
+		"@vscode/vsce": "^3.0.0",
+		"typescript": "^5.4.0"
+	}
+}
